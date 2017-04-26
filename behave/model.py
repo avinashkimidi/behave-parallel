@@ -745,15 +745,15 @@ class Scenario(TagAndStatusStatement, Replayable):
         run_steps = run_scenario and not runner.config.dry_run
         dry_run_scenario = run_scenario and runner.config.dry_run
         self.was_dry_run = dry_run_scenario
-
         if run_scenario or runner.config.show_skipped:
             for formatter in runner.formatters:
                 formatter.scenario(self)
-
         runner.context._push()
         runner.context.scenario = self
         runner.context.tags = set(self.effective_tags)
-
+        # update here:
+        runner.context.feature = self.feature
+        
         if not runner.config.dry_run and run_scenario:
             for tag in self.tags:
                 runner.run_hook('before_tag', runner.context, tag)
